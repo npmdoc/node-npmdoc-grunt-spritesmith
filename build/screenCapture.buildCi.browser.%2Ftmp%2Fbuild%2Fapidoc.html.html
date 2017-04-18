@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/Ensighten/grunt-spritesmith"
-
-    >grunt-spritesmith (v6.4.0)</a>
+    <a href="https://github.com/Ensighten/grunt-spritesmith">grunt-spritesmith (v6.4.0)</a>
 </h1>
 <h4>Grunt task for converting a set of images into a spritesheet and corresponding CSS variables.</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.grunt-spritesmith">module grunt-spritesmith</a><ol>
 
@@ -123,7 +116,7 @@
     var data = this.data;
 
     // If we were invoked via `grunt-newer`, re-localize the info
-    if (data.src === undefined &#x26;&#x26; data.files) {
+    if (data.src === undefined &amp;&amp; data.files) {
       data = data.files[0] || {};
     }
 
@@ -136,10 +129,10 @@
 
     // Verify all properties are here
     if (!src || !destImg || !destCss) {
-      return grunt.fatal(&#x27;grunt.sprite requires a src, dest (img), and destCss property&#x27;);
+      return grunt.fatal('grunt.sprite requires a src, dest (img), and destCss property');
     }
 
-    // Expand all filepaths (e.g. `*.png` -&#x3e; `home.png`)
+    // Expand all filepaths (e.g. `*.png` -&gt; `home.png`)
     var srcFiles = grunt.file.expand(src);
 
     // If there are settings for retina
@@ -147,12 +140,12 @@
     var retinaSrcFilter = data.retinaSrcFilter;
     var retinaDestImg = data.retinaDest;
     if (retinaSrcFilter || retinaDestImg) {
-      grunt.log.debug(&#x27;Retina settings detected&#x27;);
+      grunt.log.debug('Retina settings detected');
 
       // Verify our required set is present
       if (!retinaSrcFilter || !retinaDestImg) {
-        return grunt.fatal(&#x27;Retina settings detected. We must have both `retinaSrcFilter` and `retinaDest` &#x27; +
-          &#x27;provided for retina to work&#x27;);
+        return grunt.fatal('Retina settings detected. We must have both `retinaSrcFilter` and `retinaDest` ' +
+          'provided for retina to work');
       }
 
       // Filter out our retina files
@@ -167,13 +160,13 @@
           return true;
         }
       });
-      grunt.verbose.writeln(&#x27;Retina images found: &#x27; + retinaSrcFiles.join(&#x27;, &#x27;));
+      grunt.verbose.writeln('Retina images found: ' + retinaSrcFiles.join(', '));
 
       // If we have a different amount of normal and retina images, complain and leave
       if (srcFiles.length !== retinaSrcFiles.length) {
-        return grunt.fatal(&#x27;Retina settings detected but &#x27; + retinaSrcFiles.length + &#x27; retina images were found. &#x27; +
-          &#x27;We have &#x27; + srcFiles.length + &#x27; normal images and expect these numbers to line up. &#x27; +
-          &#x27;Please double check `retinaSrcFilter`.&#x27;);
+        return grunt.fatal('Retina settings detected but ' + retinaSrcFiles.length + ' retina images were found. ' +
+          'We have ' + srcFiles.length + ' normal images and expect these numbers to line up. ' +
+          'Please double check `retinaSrcFilter`.');
       }
     }
 
@@ -182,7 +175,7 @@
 
     // Determine the format of the image
     var imgOpts = data.imgOpts || {};
-    var imgFormat = imgOpts.format || imgFormats.get(destImg) || &#x27;png&#x27;;
+    var imgFormat = imgOpts.format || imgFormats.get(destImg) || 'png';
 
     // Set up the defautls for imgOpts
     _.defaults(imgOpts, {format: imgFormat});
@@ -254,7 +247,7 @@
     var data = this.data;
 
     // If we were invoked via `grunt-newer`, re-localize the info
-    if (data.src === undefined &#x26;&#x26; data.files) {
+    if (data.src === undefined &amp;&amp; data.files) {
       data = data.files[0] || {};
     }
 
@@ -267,10 +260,10 @@
 
     // Verify all properties are here
     if (!src || !destImg || !destCss) {
-      return grunt.fatal(&#x27;grunt.sprite requires a src, dest (img), and destCss property&#x27;);
+      return grunt.fatal('grunt.sprite requires a src, dest (img), and destCss property');
     }
 
-    // Expand all filepaths (e.g. `*.png` -&#x3e; `home.png`)
+    // Expand all filepaths (e.g. `*.png` -&gt; `home.png`)
     var srcFiles = grunt.file.expand(src);
 
     // If there are settings for retina
@@ -278,12 +271,12 @@
     var retinaSrcFilter = data.retinaSrcFilter;
     var retinaDestImg = data.retinaDest;
     if (retinaSrcFilter || retinaDestImg) {
-      grunt.log.debug(&#x27;Retina settings detected&#x27;);
+      grunt.log.debug('Retina settings detected');
 
       // Verify our required set is present
       if (!retinaSrcFilter || !retinaDestImg) {
-        return grunt.fatal(&#x27;Retina settings detected. We must have both `retinaSrcFilter` and `retinaDest` &#x27; +
-          &#x27;provided for retina to work&#x27;);
+        return grunt.fatal('Retina settings detected. We must have both `retinaSrcFilter` and `retinaDest` ' +
+          'provided for retina to work');
       }
 
       // Filter out our retina files
@@ -298,13 +291,13 @@
           return true;
         }
       });
-      grunt.verbose.writeln(&#x27;Retina images found: &#x27; + retinaSrcFiles.join(&#x27;, &#x27;));
+      grunt.verbose.writeln('Retina images found: ' + retinaSrcFiles.join(', '));
 
       // If we have a different amount of normal and retina images, complain and leave
       if (srcFiles.length !== retinaSrcFiles.length) {
-        return grunt.fatal(&#x27;Retina settings detected but &#x27; + retinaSrcFiles.length + &#x27; retina images were found. &#x27; +
-          &#x27;We have &#x27; + srcFiles.length + &#x27; normal images and expect these numbers to line up. &#x27; +
-          &#x27;Please double check `retinaSrcFilter`.&#x27;);
+        return grunt.fatal('Retina settings detected but ' + retinaSrcFiles.length + ' retina images were found. ' +
+          'We have ' + srcFiles.length + ' normal images and expect these numbers to line up. ' +
+          'Please double check `retinaSrcFilter`.');
       }
     }
 
@@ -313,7 +306,7 @@
 
     // Determine the format of the image
     var imgOpts = data.imgOpts || {};
-    var imgFormat = imgOpts.format || imgFormats.get(destImg) || &#x27;png&#x27;;
+    var imgFormat = imgOpts.format || imgFormats.get(destImg) || 'png';
 
     // Set up the defautls for imgOpts
     _.defaults(imgOpts, {format: imgFormat});
@@ -411,3 +404,4 @@
     ]
 </div>
 </div>
+</body></html>

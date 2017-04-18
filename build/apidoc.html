@@ -61,12 +61,347 @@
 
     <li class="apidocModuleLi"><a href="#apidoc.module.grunt-spritesmith">module grunt-spritesmith</a><ol>
 
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-spritesmith.grunt-spritesmith">
+            function <span class="apidocSignatureSpan"></span>grunt-spritesmith
+            <span class="apidocSignatureSpan">(grunt)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-spritesmith.grunt_spritesmith">
+            function <span class="apidocSignatureSpan">grunt-spritesmith.</span>grunt_spritesmith
+            <span class="apidocSignatureSpan">(grunt)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-spritesmith.toString">
+            function <span class="apidocSignatureSpan">grunt-spritesmith.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.grunt-spritesmith.toString">module grunt-spritesmith.toString</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-spritesmith.toString.toString">
+            function <span class="apidocSignatureSpan">grunt-spritesmith.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
     </ol></li>
 
 </ol></div>
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.grunt-spritesmith" id="apidoc.module.grunt-spritesmith">module grunt-spritesmith</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-spritesmith.grunt-spritesmith" id="apidoc.element.grunt-spritesmith.grunt-spritesmith">
+        function <span class="apidocSignatureSpan"></span>grunt-spritesmith
+        <span class="apidocSignatureSpan">(grunt)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function gruntSpritesmith(grunt) {
+  // Create a gruntSpritesmithFn function
+  function gruntSpritesmithFn() {
+    // Grab the raw configuration
+    var data = this.data;
+
+    // If we were invoked via `grunt-newer`, re-localize the info
+    if (data.src === undefined &#x26;&#x26; data.files) {
+      data = data.files[0] || {};
+    }
+
+    // Determine the origin and destinations
+    var src = data.src;
+    var destImg = data.dest;
+    var destCss = data.destCss;
+    var cssTemplate = data.cssTemplate;
+    var that = this;
+
+    // Verify all properties are here
+    if (!src || !destImg || !destCss) {
+      return grunt.fatal(&#x27;grunt.sprite requires a src, dest (img), and destCss property&#x27;);
+    }
+
+    // Expand all filepaths (e.g. `*.png` -&#x3e; `home.png`)
+    var srcFiles = grunt.file.expand(src);
+
+    // If there are settings for retina
+    var retinaSrcFiles;
+    var retinaSrcFilter = data.retinaSrcFilter;
+    var retinaDestImg = data.retinaDest;
+    if (retinaSrcFilter || retinaDestImg) {
+      grunt.log.debug(&#x27;Retina settings detected&#x27;);
+
+      // Verify our required set is present
+      if (!retinaSrcFilter || !retinaDestImg) {
+        return grunt.fatal(&#x27;Retina settings detected. We must have both `retinaSrcFilter` and `retinaDest` &#x27; +
+          &#x27;provided for retina to work&#x27;);
+      }
+
+      // Filter out our retina files
+      retinaSrcFiles = [];
+      srcFiles = srcFiles.filter(function filterSrcFile (filepath) {
+        // If we have a retina file, filter it out
+        if (grunt.file.match(retinaSrcFilter, filepath).length) {
+          retinaSrcFiles.push(filepath);
+          return false;
+        // Otherwise, keep it in the src files
+        } else {
+          return true;
+        }
+      });
+      grunt.verbose.writeln(&#x27;Retina images found: &#x27; + retinaSrcFiles.join(&#x27;, &#x27;));
+
+      // If we have a different amount of normal and retina images, complain and leave
+      if (srcFiles.length !== retinaSrcFiles.length) {
+        return grunt.fatal(&#x27;Retina settings detected but &#x27; + retinaSrcFiles.length + &#x27; retina images were found. &#x27; +
+          &#x27;We have &#x27; + srcFiles.length + &#x27; normal images and expect these numbers to line up. &#x27; +
+          &#x27;Please double check `retinaSrcFilter`.&#x27;);
+      }
+    }
+
+    // Create an async callback
+    var callback = this.async();
+
+    // Determine the format of the image
+    var imgOpts = data.imgOpts || {};
+    var imgFormat = imgOpts.format || imgFormats.get(destImg) || &#x27;png&#x27;;
+
+    // Set up the defautls for imgOpts
+    _.defaults(imgOpts, {format: imgFormat});
+
+    // Prepare spritesmith parameters
+    var spritesmithParams = {
+      engine: data.engine,
+      algorithm: data.algorithm,
+      padding: data.padding || 0,
+      algorithmOpts: data.algorithmOpts || {},
+      engineOpts: data.engineOpts || {},
+      exportOpts: imgOpts
+    };
+
+    // Construct our spritesmiths
+    var spritesmith = new Spritesmith(spritesmithParams);
+    var retinaSpritesmithParams;
+    var retinaSpritesmith;
+    if (retinaSrcFiles) {
+      retinaSpritesmithParams = _.defaults({
+        padding: spritesmithParams.padding * 2
+      }, spritesmithParams);
+      retinaSpritesmith = new Spritesmith(retinaSpritesmithParams);
+    }
+
+    // In parallel
+    async.parallel([
+      // Load in our normal images
+      function generateNormalImages (callback) {
+        spritesmith.createImages(srcFiles, callback);
+      },
+      // If we have retina images, load them in as well
+      function generateRetinaImages (callback) {
+        if (retinaSrcFiles) {
+          retinaSpritesmith.createImages(retinaSrcFiles, callback);
+        } else {
+          process.nextTick(callback);
+        }
+      }
+    ], function handleImages (err, resultArr) {
+      // If an error occurred, callback with it
+      if (err) {
+        grunt.fatal(err);
+        return callback(err);
+      }
+
+      // Otherwise, validate our images line up
+      var normalSprites = resultArr[0];
+      var retinaSprites = resultArr[1];
+      // TODO: Validate error looks good
+      if (retinaSprites) {
+        normalSprites.forEach(function validateSprites (normalSprite ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-spritesmith.grunt_spritesmith" id="apidoc.element.grunt-spritesmith.grunt_spritesmith">
+        function <span class="apidocSignatureSpan">grunt-spritesmith.</span>grunt_spritesmith
+        <span class="apidocSignatureSpan">(grunt)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function gruntSpritesmith(grunt) {
+  // Create a gruntSpritesmithFn function
+  function gruntSpritesmithFn() {
+    // Grab the raw configuration
+    var data = this.data;
+
+    // If we were invoked via `grunt-newer`, re-localize the info
+    if (data.src === undefined &#x26;&#x26; data.files) {
+      data = data.files[0] || {};
+    }
+
+    // Determine the origin and destinations
+    var src = data.src;
+    var destImg = data.dest;
+    var destCss = data.destCss;
+    var cssTemplate = data.cssTemplate;
+    var that = this;
+
+    // Verify all properties are here
+    if (!src || !destImg || !destCss) {
+      return grunt.fatal(&#x27;grunt.sprite requires a src, dest (img), and destCss property&#x27;);
+    }
+
+    // Expand all filepaths (e.g. `*.png` -&#x3e; `home.png`)
+    var srcFiles = grunt.file.expand(src);
+
+    // If there are settings for retina
+    var retinaSrcFiles;
+    var retinaSrcFilter = data.retinaSrcFilter;
+    var retinaDestImg = data.retinaDest;
+    if (retinaSrcFilter || retinaDestImg) {
+      grunt.log.debug(&#x27;Retina settings detected&#x27;);
+
+      // Verify our required set is present
+      if (!retinaSrcFilter || !retinaDestImg) {
+        return grunt.fatal(&#x27;Retina settings detected. We must have both `retinaSrcFilter` and `retinaDest` &#x27; +
+          &#x27;provided for retina to work&#x27;);
+      }
+
+      // Filter out our retina files
+      retinaSrcFiles = [];
+      srcFiles = srcFiles.filter(function filterSrcFile (filepath) {
+        // If we have a retina file, filter it out
+        if (grunt.file.match(retinaSrcFilter, filepath).length) {
+          retinaSrcFiles.push(filepath);
+          return false;
+        // Otherwise, keep it in the src files
+        } else {
+          return true;
+        }
+      });
+      grunt.verbose.writeln(&#x27;Retina images found: &#x27; + retinaSrcFiles.join(&#x27;, &#x27;));
+
+      // If we have a different amount of normal and retina images, complain and leave
+      if (srcFiles.length !== retinaSrcFiles.length) {
+        return grunt.fatal(&#x27;Retina settings detected but &#x27; + retinaSrcFiles.length + &#x27; retina images were found. &#x27; +
+          &#x27;We have &#x27; + srcFiles.length + &#x27; normal images and expect these numbers to line up. &#x27; +
+          &#x27;Please double check `retinaSrcFilter`.&#x27;);
+      }
+    }
+
+    // Create an async callback
+    var callback = this.async();
+
+    // Determine the format of the image
+    var imgOpts = data.imgOpts || {};
+    var imgFormat = imgOpts.format || imgFormats.get(destImg) || &#x27;png&#x27;;
+
+    // Set up the defautls for imgOpts
+    _.defaults(imgOpts, {format: imgFormat});
+
+    // Prepare spritesmith parameters
+    var spritesmithParams = {
+      engine: data.engine,
+      algorithm: data.algorithm,
+      padding: data.padding || 0,
+      algorithmOpts: data.algorithmOpts || {},
+      engineOpts: data.engineOpts || {},
+      exportOpts: imgOpts
+    };
+
+    // Construct our spritesmiths
+    var spritesmith = new Spritesmith(spritesmithParams);
+    var retinaSpritesmithParams;
+    var retinaSpritesmith;
+    if (retinaSrcFiles) {
+      retinaSpritesmithParams = _.defaults({
+        padding: spritesmithParams.padding * 2
+      }, spritesmithParams);
+      retinaSpritesmith = new Spritesmith(retinaSpritesmithParams);
+    }
+
+    // In parallel
+    async.parallel([
+      // Load in our normal images
+      function generateNormalImages (callback) {
+        spritesmith.createImages(srcFiles, callback);
+      },
+      // If we have retina images, load them in as well
+      function generateRetinaImages (callback) {
+        if (retinaSrcFiles) {
+          retinaSpritesmith.createImages(retinaSrcFiles, callback);
+        } else {
+          process.nextTick(callback);
+        }
+      }
+    ], function handleImages (err, resultArr) {
+      // If an error occurred, callback with it
+      if (err) {
+        grunt.fatal(err);
+        return callback(err);
+      }
+
+      // Otherwise, validate our images line up
+      var normalSprites = resultArr[0];
+      var retinaSprites = resultArr[1];
+      // TODO: Validate error looks good
+      if (retinaSprites) {
+        normalSprites.forEach(function validateSprites (normalSprite ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-spritesmith.toString" id="apidoc.element.grunt-spritesmith.toString">
+        function <span class="apidocSignatureSpan">grunt-spritesmith.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return text;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.grunt-spritesmith.toString" id="apidoc.module.grunt-spritesmith.toString">module grunt-spritesmith.toString</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-spritesmith.toString.toString" id="apidoc.element.grunt-spritesmith.toString.toString">
+        function <span class="apidocSignatureSpan">grunt-spritesmith.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 </div>
 
