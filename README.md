@@ -1,9 +1,14 @@
-# api documentation for  [grunt-spritesmith (v6.4.0)](https://github.com/Ensighten/grunt-spritesmith)  [![npm package](https://img.shields.io/npm/v/npmdoc-grunt-spritesmith.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-grunt-spritesmith) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-grunt-spritesmith.svg)](https://travis-ci.org/npmdoc/node-npmdoc-grunt-spritesmith)
+# npmdoc-grunt-spritesmith
+
+#### api documentation for  [grunt-spritesmith (v6.4.0)](https://github.com/Ensighten/grunt-spritesmith)  [![npm package](https://img.shields.io/npm/v/npmdoc-grunt-spritesmith.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-grunt-spritesmith) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-grunt-spritesmith.svg)](https://travis-ci.org/npmdoc/node-npmdoc-grunt-spritesmith)
+
 #### Grunt task for converting a set of images into a spritesheet and corresponding CSS variables.
 
-[![NPM](https://nodei.co/npm/grunt-spritesmith.png?downloads=true)](https://www.npmjs.com/package/grunt-spritesmith)
+[![NPM](https://nodei.co/npm/grunt-spritesmith.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/grunt-spritesmith)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-grunt-spritesmith/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-grunt-spritesmith_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-grunt-spritesmith/build/apidoc.html)
+- [https://npmdoc.github.io/node-npmdoc-grunt-spritesmith/build/apidoc.html](https://npmdoc.github.io/node-npmdoc-grunt-spritesmith/build/apidoc.html)
+
+[![apidoc](https://npmdoc.github.io/node-npmdoc-grunt-spritesmith/build/screenCapture.buildCi.browser.%252Ftmp%252Fbuild%252Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-grunt-spritesmith/build/apidoc.html)
 
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-grunt-spritesmith/build/screenCapture.npmPackageListing.svg)
 
@@ -18,7 +23,6 @@
 {
     "author": {
         "name": "Todd Wolfson",
-        "email": "todd@twolfson.com",
         "url": "http://twolfson.com/"
     },
     "bugs": {
@@ -34,7 +38,6 @@
         },
         {
             "name": "MoOx",
-            "email": "github@moox.io",
             "url": "http://moox.io/"
         },
         {
@@ -42,12 +45,10 @@
             "url": "http://jasonsandmeyer.com"
         },
         {
-            "name": "scanieso",
-            "email": "scanieso@gmail.com"
+            "name": "scanieso"
         },
         {
-            "name": "STuFF",
-            "email": "nchalleil@gmail.com"
+            "name": "STuFF"
         }
     ],
     "dependencies": {
@@ -105,13 +106,11 @@
     "main": "tasks/grunt-spritesmith.js",
     "maintainers": [
         {
-            "name": "twolfson",
-            "email": "todd@twolfson.com"
+            "name": "twolfson"
         }
     ],
     "name": "grunt-spritesmith",
     "optionalDependencies": {},
-    "readme": "ERROR: No README data found!",
     "repository": {
         "type": "git",
         "url": "git://github.com/Ensighten/grunt-spritesmith.git"
@@ -125,16 +124,6 @@
     "version": "6.4.0"
 }
 ```
-
-
-
-# <a name="apidoc.tableOfContents"></a>[table of contents](#apidoc.tableOfContents)
-
-#### [module grunt-spritesmith](#apidoc.module.grunt-spritesmith)
-
-
-
-# <a name="apidoc.module.grunt-spritesmith"></a>[module grunt-spritesmith](#apidoc.module.grunt-spritesmith)
 
 
 
