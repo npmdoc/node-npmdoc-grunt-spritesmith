@@ -1,6 +1,6 @@
 # npmdoc-grunt-spritesmith
 
-#### api documentation for  [grunt-spritesmith (v6.4.0)](https://github.com/Ensighten/grunt-spritesmith)  [![npm package](https://img.shields.io/npm/v/npmdoc-grunt-spritesmith.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-grunt-spritesmith) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-grunt-spritesmith.svg)](https://travis-ci.org/npmdoc/node-npmdoc-grunt-spritesmith)
+#### basic api documentation for  [grunt-spritesmith (v6.4.0)](https://github.com/Ensighten/grunt-spritesmith)  [![npm package](https://img.shields.io/npm/v/npmdoc-grunt-spritesmith.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-grunt-spritesmith) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-grunt-spritesmith.svg)](https://travis-ci.org/npmdoc/node-npmdoc-grunt-spritesmith)
 
 #### Grunt task for converting a set of images into a spritesheet and corresponding CSS variables.
 
@@ -121,7 +121,8 @@
         "pretest": "twolfson-style install",
         "test": "npm run precheck && mocha src-test/ --reporter dot --timeout 5000 && npm run lint"
     },
-    "version": "6.4.0"
+    "version": "6.4.0",
+    "bin": {}
 }
 ```
 
